@@ -16,44 +16,72 @@ export ZSH_THEME="nanotech"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git github macports osx ruby dirpersist gem)
+plugins=(git github ruby dirpersist gem)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=/opt/local/bin:/opt/local/sbin:$PATH
-export DISPLAY=:0.0
-export EDITOR=/opt/local/bin/vim
-export TERM=xterm-256color
-export MANPATH=/opt/local/share/man:$MANPATH
+export PATH=/usr/bin:$PATH
+export EDITOR=/usr/bin/vim
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-alias apachectl='sudo /opt/local/apache2/bin/apachectl'
-alias mysqlstart='sudo /opt/local/bin/mysqld_safe5 &'
-alias mysqlstop='/opt/local/bin/mysqladmin5 -u root -p shutdown' 
-alias cpan='sudo perl -MCPAN -e shell'
-alias gem='sudo gem'
-alias python='/opt/local/bin/python'
-alias seleniumstart='sudo java -jar /Users/stephenprater/selenium-server-1.0.1/selenium-server.jar'
-alias vncrestart='sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -restart -agent -console'
-alias ls='ls -lhG'
-alias vim='sudo vim'
-alias ruby_prof='/opt/local/lib/ruby/gems/1.9.1/gems/ruby-prof-0.9.2/bin/ruby-prof'
 export CLICOLOR=1
 
+
+alias gem='sudo gem'
+alias ls='ls --color -lh'
+alias elinks="elinks google.com"
+alias install="sudo yaourt -S"
+alias search="sudo yaourt -Ss"
+alias update="sudo yaourt -Sy"
+alias upgrade="sudo yaourt -Syu --aur"
+alias uninstall="sudo yaourt -Rs"
+alias remove="sudo yaourt -R"
+alias info="yaourt -Si"
+alias fetch="yaourt -G"
+alias list_files="yaourt -Ql"
+alias search_local="sudo yaourt -Qs"
+alias local_install="sudo pacman -U"
+alias tmux="tmux -2u"
+
+
 if [ -f /opt/local/etc/profile.d/cdargs-bash.sh ]; then
-        source /opt/local/etc/profile.d/cdargs-bash.sh
+    source /opt/local/etc/profile.d/cdargs-bash.sh
 fi
 
 load_avg() {
-  LA=$(sysctl vm.loadavg | sed s/'^vm.loadavg: '//)
+  LA=$(cat /proc/loadavg)
   echo $LA
 }
+free_mem(){
+  FM=$(ruby -e "x=open('/proc/meminfo').each_line.to_a; y = [x[0],x[1],x[6]].flatten.join.scan(/([0-9]*?)\skB/)\
+.flatten.map { |i| i.to_i / 1000 }; puts \"#{y[1]}/#{y[2]}/#{y[0]}\"")
+  echo $FM
+}
+update_wallpaper() {
+  x=$(ping -c1 google.com 2>&1 | grep unknown)
+  if [ "$x" = "" ]; then
+    if [ -e "$HOME/.potd.jpg" ]; then
+      find "$HOME/.potd.jpg" -mtime +1 -exec rm {} \;
+    fi
 
-#introduce some sexy characters
+    if [ ! -e "$HOME/.potd.jpg" ]; then
+      /usr/bin/wget -q http://toolserver.org/~daniel/potd/potd.php/enwiki/1024x768 -O $HOME/.potd.jpg
+      /usr/bin/convert -modulate 10,0,100 $HOME/.potd.jpg $HOME/.potd.jpg
+      /usr/bin/convert -crop 1024x768+0+0 $HOME/.potd.jpg $HOME/.potd.jpg
+    fi
 
+    if [ -e "/tmp/potd.jpg" ]; then
+      fbv -ciuker $HOME/.potd.jpg << EOF
+      q
+EOF
+    fi
+
+    export FBTERM_BACKGROUND_IMAGE=1
+ fi
+}
 
 #RPROMPT="%F{red}%(?..[ %? ]) $(git_prompt_info) %F{blue}] %F{green}%D{%L:%M} %F{yellow}%D{%p}%f"
-PROMPT="%F{241}%n %F{green}%2c %F{cyan} [ %f"
-RPROMPT="%F{red}%(?..[ %? ]) $(git_prompt_info) %F{cyan}] %F{green}%* %F{241}[%j] %F{blue}$(load_avg)%f"
+PROMPT='%F{241}%n %F{green}%2c %F{cyan} [ %f'
+RPROMPT='%F{red}%(?..[ %? ]) $(git_prompt_info) %F{cyan}] %F{green}%* %F{241}[%j] %F{blue}$(free_mem)%f'
 
