@@ -39,12 +39,32 @@ dir_name() {
   echo "%F{green}%2c"
 }
 
-PROMPT_INFO="$(draw 21 ul hbar) $(host_name)
-$(draw 21 ll hbar) $(dir_name)"
+current_position() {
+  echoti u7
+  read -d R current
+  printf $current | od -a
+}
+
+preexec() {
+  local width=""
+  width=$(( $COLUMNS/2 ))
+  echoti rc  #restore the terminal position
+  draw-console f215 hbar x$width
+}
+
+precmd() {
+  echoti sc
+}
+
+# we start two down
+echoti cud 2
+
+PROMPT_INFO="$(echoti home)$(draw f21 ul hbar) $(host_name)
+$(draw f21 ll hbar) $(dir_name)"
 DEF_PROMPT="${(e)${PROMPT_INFO}} %F{cyan} [ %f"
 INS_MODE_PROMPT="${(e)${PROMPT_INFO}} %F{red} [ %f"
 
-RPROMPT_INFO="$(draw 21 vbar) %F{green}%* %F{241}[%j] %F{blue}$(free_mem)"
+RPROMPT_INFO="$(draw f21 vbar) %F{green}%* %F{241}[%j] %F{blue}$(free_mem)"
 DEF_RPROMPT="%F{red}%(?..[ %? ]) $(git_prompt_info) %F{cyan}]%f ${(e)${RPROMPT_INFO}} "
 INS_MODE_RPROMPT="%F{red}%(?..[ %? ]) $(git_prompt_info) %F{red}]%f ${(e)${RPROMPT_INFO}} "
 
