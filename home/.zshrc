@@ -1,8 +1,16 @@
 # Path to your oh-my-zsh configuration.
+
+# don't use zle on our dev version
+if [[ $0 == "./zsh-dev/bin/zsh-dev" ]]; then
+  unsetopt zle
+fi
+
 export ZSH=$HOME/.oh-my-zsh
+
 
 # Set to the name theme to load.
 # Look in ~/.oh-my-zsh/themes/
+export ZSH_THEME="nanotech"
 
 # Set to this to use case-sensitive completion
 # export CASE_SENSITIVE="true"
@@ -25,6 +33,7 @@ elif [ $(uname) = "Linux" ]; then
   source $ZSH/oh-my-zsh.sh
 fi
 
+
 host_name() {
   local host_prompt=""
   if [ $SSH_CLIENT ]; then
@@ -39,34 +48,25 @@ dir_name() {
   echo "%F{green}%2c"
 }
 
-current_position() {
-  echoti u7
-  read -d R current
-  printf $current | od -a
-}
-
-preexec() {
-  local width=""
-  width=$(( $COLUMNS/2 ))
-  echoti rc  #restore the terminal position
-  draw-console f215 hbar x$width
-}
-
-precmd() {
-  echoti sc
-}
+#current_position() {
+#  echoti u7
+#  read -d R current
+#  row=$(printf $current | strings)
+#  [[ "$row" ([0-9]+);([0-9]) ]] && print -l $MATCH X $matches
+#  
+#}
 
 # we start two down
-echoti cud 2
+#
+setopt prompt_subst
 
-PROMPT_INFO="$(echoti home)$(draw f21 ul hbar) $(host_name)
-$(draw f21 ll hbar) $(dir_name)"
-DEF_PROMPT="${(e)${PROMPT_INFO}} %F{cyan} [ %f"
-INS_MODE_PROMPT="${(e)${PROMPT_INFO}} %F{red} [ %f"
+PROMPT_INFO='$(draw f21 ul hbar) $(host_name)- %L
+$(draw f21 ll hbar) $(dir_name)'
+DEF_PROMPT='${(e)${PROMPT_INFO}} %F{cyan} [ %f'
+INS_MODE_PROMPT='${(e)${PROMPT_INFO}} %F{red} [ %f'
 
-RPROMPT_INFO="$(draw f21 vbar) %F{green}%* %F{241}[%j] %F{blue}$(free_mem)"
-DEF_RPROMPT="%F{red}%(?..[ %? ]) $(git_prompt_info) %F{cyan}]%f ${(e)${RPROMPT_INFO}} "
-INS_MODE_RPROMPT="%F{red}%(?..[ %? ]) $(git_prompt_info) %F{red}]%f ${(e)${RPROMPT_INFO}} "
+DEF_RPROMPT='%F{red}%(?..[ %? ]) $(git_prompt_info) %F{cyan}]%f $(draw f21 vbar) %F{green}%* %F{241}[%j] %F{blue}$(free_mem)'
+INS_MODE_RPROMPT='%F{red}%(?..[ %? ]) $(git_prompt_info) %F{red}]%f $(draw f21 vbar) %F{green}%* %F{241}[%j] %F{blue}$(free_mem)'
 
 RPROMPT=$DEF_RPROMPT
 PROMPT=$DEF_PROMPT

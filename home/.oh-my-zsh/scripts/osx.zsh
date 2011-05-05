@@ -23,7 +23,7 @@ load_avg() {
   echo $LA
 }
 
-free_mem() {
+function free_mem() {
   FM=$(ruby -e '
     x = `vm_stat`.each_line.to_a[0..4].join.scan(/([0-9]*?)\./).flatten.map { |i| (i.to_i * 4096) / 1000000 };
     y = `sysctl hw.memsize`.split(/:\s/).last.to_i / 1000000;
