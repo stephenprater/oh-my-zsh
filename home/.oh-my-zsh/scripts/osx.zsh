@@ -14,8 +14,9 @@ alias python='/opt/local/bin/python'
 alias seleniumstart='sudo java -jar /Users/stephenprater/selenium-server-1.0.1/selenium-server.jar'
 alias vncrestart='sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -restart -agent -console'
 alias ls='ls -lhG'
-alias vim='sudo vim'
+alias vim='vim'
 alias ruby_prof='/opt/local/lib/ruby/gems/1.9.1/gems/ruby-prof-0.9.2/bin/ruby-prof'
+alias sqlite3='sqlite3 --line'
 export CLICOLOR=1
 
 load_avg() {
