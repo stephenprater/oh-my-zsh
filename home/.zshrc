@@ -14,6 +14,11 @@ export ZSH_THEME="nanotech"
 
 # Set to this to use case-sensitive completion
 # export CASE_SENSITIVE="true"
+#
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd 'e' edit-command-line
+bindkey -M vicmd ':' executed-named-command
 
 # Comment this out to disable weekly auto-update checks
 # export DISABLE_AUTO_UPDATE="true"
