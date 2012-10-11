@@ -59,6 +59,7 @@ dir_name() {
 # we start two down
 #
 setopt prompt_subst
+bindkey -v
 
 PROMPT_INFO='$(draw f21 ul hbar) $(host_name)- %L
 $(draw f21 ll hbar) $(dir_name)'
@@ -70,3 +71,22 @@ INS_MODE_RPROMPT='%F{red}%(?..[ %? ]) $(git_prompt_info) %F{red}]%f $(draw f21 v
 
 RPROMPT=$DEF_RPROMPT
 PROMPT=$DEF_PROMPT
+
+export PATH=$HOME/.rbenv/bin:$PATH 
+
+export PATH=/Users/stephenp/.rbenv/shims:$PATH
+source "/Users/stephenp/.rbenv/libexec/../completions/rbenv.zsh"
+rbenv rehash 2>/dev/null
+function rbenv() {
+  command="$1"
+    if [ "$#" -gt 0 ]; then
+      shift
+    fi
+
+    case "$command" in
+      shell)
+    eval `rbenv "sh-$command" "$@"`;;
+      *)
+      command rbenv "$command" "$@";;
+    esac
+}
