@@ -55,6 +55,8 @@ dir_name() {
 #  [[ "$row" ([0-9]+);([0-9]) ]] && print -l $MATCH X $matches
 #  
 #}
+#
+bindkey -v
 
 # we start two down
 #
@@ -70,3 +72,6 @@ INS_MODE_RPROMPT='%F{red}%(?..[ %? ]) $(git_prompt_info) %F{red}]%f $(draw f21 v
 
 RPROMPT=$DEF_RPROMPT
 PROMPT=$DEF_PROMPT
+
+export RBENV_ROOT=/usr/local/opt/rbenv
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
