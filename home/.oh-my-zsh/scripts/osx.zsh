@@ -1,12 +1,13 @@
 export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export DISPLAY=:0.0
 export EDITOR=mvim
-export TERM=xterm-256color
+export TERM=screen-256color
 export MANPATH=/opt/local/share/man:$MANPATH
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 alias vncrestart='sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -restart -agent -console'
 alias ls='ls -lhG'
+alias vim='/Users/prater/My\ Applications/MacVim.app/Contents/MacOS/Vim'
 export CLICOLOR=1
 
 load_avg() {

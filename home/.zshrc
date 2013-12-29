@@ -72,6 +72,12 @@ tmux_current() {
   fi
 }
 
+hitch() {
+  command hitch "$@"
+  if [[ -s "$HOME/.hitch_export_authors" ]] ; then source "$HOME/.hitch_export_authors" ; fi
+}
+alias unhitch='hitch -u'
+
 export FIREHOST_USER=stephen_coll02ftp
 export VPN_USER=coll02-sprater 
 export VPN_PASS='sv9$Lvy75b$kCh$'
@@ -107,5 +113,12 @@ INS_MODE_RPROMPT='%F{red}%(?..[ %? ]) $(git_prompt_info) %F{red}]%f $(draw f21 v
 RPROMPT=$DEF_RPROMPT
 PROMPT=$DEF_PROMPT
 
-export RBENV_ROOT=/usr/local/opt/rbenv
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+#export RBENV_ROOT=/usr/local/opt/rbenv
+#if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+
+source $HOME/.shellrc
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+source ~/.rvm/scripts/rvm
+
+
